@@ -1,0 +1,51 @@
+# Dataset (large files, not for git)
+data/
+datasets/
+
+# Model checkpoints
+checkpoints/
+*.pth
+*.pt
+*.onnx
+*.h5
+
+# Outputs and results
+outputs/
+results/
+submission/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+wandb/
+
+# Environment variables
+.env

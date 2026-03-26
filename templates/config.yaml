@@ -1,0 +1,92 @@
+# ===== HACKATHON CONFIG — WhiteCoat.dev =====
+# Biopsy images: classification 100x100 RGB, segmentation 128x128 RGB
+
+# --- Problem A: Classification (30 pts, metric: ACCURACY) ---
+# Стратегия: 3 модели → ensemble
+# Изображения 100x100, upscale до 224 (стандарт pretrained моделей)
+
+classification:
+  # Модель 1 (основная): EfficientNetV2-S — лучшая для гистологии
+  models:
+    - name: "tf_efficientnetv2_s"
+      image_size: 224
+      batch_size: 64
+      dropout: 0.3
+    # Модель 2: ConvNeXt-Tiny — современная CNN
+    - name: "convnext_tiny"
+      image_size: 224
+      batch_size: 64
+      dropout: 0.3
+    # Модель 3: Swin-Tiny — transformer
+    - name: "swin_tiny_patch4_window7_224"
+      image_size: 224
+      batch_size: 64
+      dropout: 0.3
+
+  # Общие параметры для всех моделей
+  pretrained: true
+  num_classes: 12
+  learning_rate: 0.0003
+  epochs: 40
+  early_stopping_patience: 7
+  optimizer: "adamw"
+  scheduler: "cosine"
+  weight_decay: 0.01
+  use_mixup: true
+  mixup_alpha: 0.4
+  label_smoothing: 0.1
+  use_weighted_loss: true  # Критично! Классы несбалансированы (331 vs 2136)
+
+# --- Problem B: Segmentation (40 pts, metric: MEAN IoU) ---
+# Стратегия: 2 модели → ensemble
+# Изображения 128x128, можно работать с 256 (upscale для лучшего качества)
+
+segmentation:
+  models:
+    # Модель 1: U-Net++ — золотой стандарт
+    - arch: "UnetPlusPlus"
+      encoder: "efficientnet-b4"
+      image_size: 256
+      batch_size: 32
+    # Модель 2: DeepLabV3+ — сильная альтернатива
+    - arch: "DeepLabV3Plus"
+      encoder: "resnet50"
+      image_size: 256
+      batch_size: 32
+
+  # Общие параметры
+  pretrained: true
+  num_classes: 1  # Binary segmentation
+  learning_rate: 0.0003
+  epochs: 60
+  early_stopping_patience: 10
+  optimizer: "adamw"
+  scheduler: "cosine"
+  weight_decay: 0.01
+  dice_weight: 0.5
+  bce_weight: 0.5
+
+# --- Augmentation ---
+augmentation:
+  train:
+    horizontal_flip: 0.5
+    vertical_flip: 0.5
+    random_rotate90: true
+    rotation_limit: 20
+    hue_saturation: true
+    brightness_limit: 0.2
+    contrast_limit: 0.2
+    clahe: true
+    coarse_dropout: true
+  test_time_augmentation:
+    enabled: true
+    transforms: ["original", "hflip", "vflip", "rotate90"]
+
+# --- General ---
+general:
+  seed: 42
+  num_workers: 4
+  device: "auto"  # auto, cuda, mps, cpu
+  mixed_precision: true
+  output_dir: "outputs"
+  checkpoint_dir: "checkpoints"
