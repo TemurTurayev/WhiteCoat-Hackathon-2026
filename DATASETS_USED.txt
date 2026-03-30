@@ -1,0 +1,18 @@
+=== External Datasets Used ===
+
+1. ISIC 2019 Classification Dataset
+   Source: https://challenge.isic-archive.com/data/#2019
+   Images: 25,331
+   Classes: 8 (MEL, NV, BCC, AK, BKL, DF, VASC, SCC)
+   License: CC-BY-NC 4.0
+   Used for: Intermediate fine-tuning of classification models
+
+2. ISIC 2018 Task 1 Segmentation Dataset
+   Source: https://challenge.isic-archive.com/data/#2018
+   Images: 2,594 with binary segmentation masks
+   License: CC-BY-NC 4.0
+   Used for: Pretraining segmentation encoder
+
+3. Hackathon Training Data
+   Classification: 11,411 images, 12 classes
+   Segmentation: 1,800 train + 400 validation with masks

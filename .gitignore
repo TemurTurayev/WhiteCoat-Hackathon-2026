@@ -2,8 +2,11 @@
 data/
 datasets/
 
-# Model checkpoints
+# Model checkpoints (large binary files)
 checkpoints/
+all_models/
+classification_models/
+segmentation_models/
 *.pth
 *.pt
 *.onnx
@@ -12,7 +15,9 @@ checkpoints/
 # Outputs and results
 outputs/
 results/
-submission/
+
+# Large zip archives
+WhiteCoat.dev_FULL_RESEARCH.zip
 
 # Python
 __pycache__/
